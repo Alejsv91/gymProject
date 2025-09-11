@@ -54,3 +54,6 @@ Backend:
 - pytest
   Frontend:
 - npm test
+
+confluence
+https://alejsv91.atlassian.net/jira/software/projects/SCRUM/boards/1
