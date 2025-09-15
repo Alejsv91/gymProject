@@ -32,6 +32,8 @@ services:
       - ./backend/.env
     depends_on:
       - db
+    volumes:
+      - ./backend:/app
 
 volumes:
   postgres_data:
