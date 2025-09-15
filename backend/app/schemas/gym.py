@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-class GymOut(BaseModel):
+class Gym(BaseModel):
     legal_id: str
     name: str
     owner: str
@@ -9,11 +9,11 @@ class GymOut(BaseModel):
     email: str
     is_active: bool
     
-class GymRead(GymOut):
+class GymOut(Gym): 
     id: int
     activation_date: datetime
     
-class GymUpdate(GymOut):
+class GymUpdate(Gym):
     id: int
     activation_date: datetime
     
