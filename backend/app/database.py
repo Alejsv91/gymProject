@@ -4,8 +4,8 @@ import os
 from dotenv import load_dotenv
 from typing import Generator
 
+# load the .env variables
 load_dotenv()
-
 # sqlalchemy is a ORM(Object Relational Mapper)
 DATABASE_URL = os.getenv("DATABASE_URL")
 
