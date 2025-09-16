@@ -139,3 +139,65 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# 🔧 Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+.env
+.env.*
+
+# 🐍 Entorno virtual
+venv/
+.venv/
+env/
+ENV/
+
+# 🐳 Docker
+*.log
+*.pid
+*.db
+*.sqlite3
+docker-compose.override.yml
+*.local.yml
+
+# 🧪 Testing & herramientas
+.coverage
+.cache/
+.pytest_cache/
+.mypy_cache/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# 🧱 Alembic (si usas migraciones)
+migrations/
+alembic.ini
+
+# 📦 Node.js / React
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.DS_Store
+frontend/.eslintcache
+frontend/.parcel-cache/
+frontend/.turbo/
+frontend/.next/
+frontend/.vite/
+
+# 🧹 Sistema operativo
+.DS_Store
+Thumbs.db
+
+# 🧠 Editor y IDE
+.vscode/
+.idea/
+*.swp
+*.sublime-project
+*.sublime-workspace
+
