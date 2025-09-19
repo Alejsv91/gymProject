@@ -1,4 +1,4 @@
-// frontend/src/components/GymInfo.jsx
+// src/pages/GymInfo.jsx
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -9,11 +9,11 @@ const GymInfo = () => {
   useEffect(() => {
     axios
       .get("http://localhost:8000/gym")
-      .then((response) => setGym(response.data))
-      .catch((error) => console.error("Error fetching gym info:", error));
+      .then((res) => setGym(res.data))
+      .catch((err) => console.error(err));
   }, []);
 
-  if (!gym) return <p>Cargando información del gimnasio...</p>;
+  if (!gym) return <p>Cargando...</p>;
 
   return (
     <div>
