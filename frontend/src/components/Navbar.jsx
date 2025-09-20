@@ -1,28 +1,39 @@
-// src/App.js o src/components/Navbar.jsx
+import { NavLink, Route, Routes } from "react-router-dom";
+import Gyms from "../pages/Gyms";
+import Team from "../pages/Team";
 
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-// import Home from "./pages/Home";
-import GymInfo from "../pages/GymInfo";
+const navigation = [
+  { path: "/gyms", element: <Gyms />, label: "Gyms" },
+  { path: "/team", element: <Team />, label: "Team" },
+];
 
-export default function Navbar() {
+function Navbar() {
   return (
-    <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Inicio</Link>
-          </li>
-          <li>
-            <Link to="/gym">Gimnasio</Link>
-          </li>{" "}
-          {/* ✅ Nueva opción */}
-        </ul>
+    <>
+      <nav className="bg-gray-800 text-white px-4 py-3 flex gap-6">
+        {navigation.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 font-semibold"
+                : "hover:text-yellow-300"
+            }
+          >
+            {item.label}
+          </NavLink>
+        ))}
       </nav>
-
-      <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
-        <Route path="/gym" element={<GymInfo />} /> {/* ✅ Nueva ruta */}
-      </Routes>
-    </Router>
+      <div className="p-4">
+        <Routes>
+          {navigation.map((item) => (
+            <Route key={item.path} path={item.path} element={item.element} />
+          ))}
+        </Routes>
+      </div>
+    </>
   );
 }
+
+export default Navbar;
