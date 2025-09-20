@@ -1,12 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
-import Navbar from './components/Navbar';
+import logo from "./logo.svg";
+import "./App.css";
+import Navbar from "./components/Navbar";
+import TailwindNavbar from "./components/TailwindNavbar";
 
 function App() {
   return (
     <div className="App">
+      <TailwindNavbar></TailwindNavbar>
       <header className="App-header">
-        <Navbar></Navbar>
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -20,10 +21,7 @@ function App() {
           Learn React
         </a>
       </header>
-      <body>
-
-      
-      </body>
+      <body></body>
     </div>
   );
 }
