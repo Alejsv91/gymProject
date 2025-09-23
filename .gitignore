@@ -201,3 +201,4 @@ Thumbs.db
 *.sublime-project
 *.sublime-workspace
 
+backend/app/__pycache__/*
