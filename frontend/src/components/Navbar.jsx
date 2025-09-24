@@ -1,10 +1,12 @@
 import { NavLink, Route, Routes } from "react-router-dom";
-import Gyms from "../pages/Gyms";
+import Gyms from "../pages/gyms/Gyms";
 import Team from "../pages/Team";
+import GymCreate from "../pages/gyms/GymCreate";
 
 const navigation = [
   { path: "/gyms", element: <Gyms />, label: "Gyms" },
   { path: "/team", element: <Team />, label: "Team" },
+  { path: "/gym/create", element: <GymCreate />, label: "Create Gym" },
 ];
 
 function Navbar() {

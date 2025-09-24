@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ENDPOINTS } from "../constants/endpoints";
+import { ENDPOINTS } from "../../constants/endpoints";
 
 function Gyms() {
   const [gyms, setGyms] = useState([]);
   const [loading, setLoading] = useState(true);
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:8000/gyms/") // ajusta el puerto si usas Docker
+    fetch(`${ENDPOINTS.gyms}`) // ajusta el puerto si usas Docker
       .then((res) => res.json())
       .then((data) => {
         setGyms(data);
@@ -66,7 +65,7 @@ function Gyms() {
               <td className="px-6 py-4 text-sm text-gray-600">{gym.phone}</td>
               <td className="px-6 py-4 text-sm text-gray-600">
                 <button
-                  onClick={() => navigate(`/gyms/${gym.id}/edit`)}
+                  onClick={() => navigate(`${ENDPOINTS.gymEdit(gym.id)}`)}
                   className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                 >
                   Edit
@@ -76,6 +75,14 @@ function Gyms() {
           ))}
         </tbody>
       </table>
+      <div>
+        <button
+          onClick={() => navigate(ENDPOINTS.gymCreate)}
+          className="mt-6 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+        >
+          Register new gym
+        </button>
+      </div>
     </div>
   );
 }
