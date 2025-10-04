@@ -13,3 +13,7 @@ export function isNumeric(str) {
 export function containsSpecialCharacters(str) {
   return /[^a-zA-Z0-9]/.test(str);
 }
+
+export function isAlphabeticWithSpaces(str) {
+  return /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(str);
+}

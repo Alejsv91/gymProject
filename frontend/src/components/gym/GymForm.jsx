@@ -6,6 +6,7 @@ import {
   isNumeric,
   containsSpecialCharacters,
   isEmail,
+  isAlphabeticWithSpaces,
 } from "../../utils/validationUtils";
 
 const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
@@ -42,10 +43,8 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
       name: "owner",
       label: "Owner",
       validations: {
-        alphabetic: true,
-        special: false,
-        numeric: false,
-        minLength: 9,
+        isAlphabeticWithSpaces: true,
+        minLength: 5,
       },
     },
     {
@@ -66,53 +65,46 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
+    let error = "";
+    if (newInput.validations !== undefined) {
+    }
     if (
-      newInput.validations["alphabetic"] !== undefined &&
-      newInput.validations["alphabetic"] &&
-      !isAlphabetic(value)
+      newInput.validations?.minLength &&
+      value.length < newInput.validations.minLength
     ) {
-      setFormErrors((prev) => ({
-        ...prev,
-        [name]: `${newInput.label} required alphabetic characters only`,
-      }));
-    } else {
-      setFormErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
+      error = `${newInput.label} must be at least ${newInput.validations.minLength} characters.`;
+    }
+
+    if (newInput.validations?.alphabetic && !isAlphabetic(value)) {
+      error = `${newInput.label} requires alphabetic characters only.`;
+    }
+
+    if (newInput.validations?.numeric && !isNumeric(value)) {
+      error = `${newInput.label} requires numeric characters only.`;
     }
 
     if (
-      newInput.validations["numeric"] !== undefined &&
-      newInput.validations["numeric"] &&
-      !isNumeric(value)
+      newInput.validations?.special === false &&
+      containsSpecialCharacters(value)
     ) {
-      setFormErrors((prev) => ({
-        ...prev,
-        [name]: `${newInput.label} required numeric characters only`,
-      }));
-    } else {
-      setFormErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
+      error = `${newInput.label} must not contain special characters.`;
+    }
+
+    if (newInput.validations?.isEmail && !isEmail(value)) {
+      error = `Please enter a valid email.`;
     }
 
     if (
-      newInput.validations["isEmail"] !== undefined &&
-      newInput.validations["isEmail"] &&
-      !isEmail(value)
+      newInput.validations?.isAlphabeticWithSpaces &&
+      !isAlphabeticWithSpaces(value)
     ) {
-      setFormErrors((prev) => ({
-        ...prev,
-        [name]: `Please add a valid email`,
-      }));
-    } else {
-      setFormErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
+      error = `Please enter a valid Name.`;
     }
+
+    setFormErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }));
 
     setFormData((prev) => ({
       ...prev,
@@ -122,6 +114,8 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
       },
     }));
   };
+
+  // const validations =
 
   const handleSubmit = (e) => {
     e.preventDefault();
