@@ -1,13 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Gym } from "../../types/gym";
-import {
-  isAlphabetic,
-  isNumeric,
-  containsSpecialCharacters,
-  isEmail,
-  isAlphabeticWithSpaces,
-} from "../../utils/validationUtils";
+import { validateFields } from "../../utils/validationUtils";
 
 const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
   const gym = new Gym(
@@ -31,6 +24,7 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
         numeric: true,
         minLength: 9,
       },
+      required: true,
     },
     {
       name: "name",
@@ -38,6 +32,7 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
       validations: {
         minLength: 1,
       },
+      required: true,
     },
     {
       name: "owner",
@@ -46,6 +41,7 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
         isAlphabeticWithSpaces: true,
         minLength: 5,
       },
+      required: true,
     },
     {
       name: "phone",
@@ -54,10 +50,22 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
         numeric: true,
         minLength: 8,
       },
+      required: true,
     },
-    { name: "email", label: "Email", validations: { isEmail: true } },
+    {
+      name: "email",
+      label: "Email",
+      validations: { isEmail: true },
+      required: true,
+    },
   ];
   const [formErrors, setFormErrors] = useState({});
+  const initialRequiredData = inputs.reduce((acc, input) => {
+    if (input.required) acc[input.name] = false;
+    return acc;
+  }, {});
+  const [requiredData, setRequiredData] = useState(initialRequiredData);
+
   const checkbox = [{ name: "isActive", label: "Is Active" }];
   const dateTimeInput = [{ name: "activationDate", label: "Activation Date" }];
 
@@ -65,41 +73,19 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
+    if (newInput.required) {
+      setRequiredData((prev) => ({
+        ...prev,
+        [name]: newValue.trim() !== "",
+      }));
+    }
+
     let error = "";
-    if (newInput.validations !== undefined) {
-    }
-    if (
-      newInput.validations?.minLength &&
-      value.length < newInput.validations.minLength
-    ) {
-      error = `${newInput.label} must be at least ${newInput.validations.minLength} characters.`;
+    if (newInput?.validations !== undefined) {
+      error = validateFields(newInput, value);
     }
 
-    if (newInput.validations?.alphabetic && !isAlphabetic(value)) {
-      error = `${newInput.label} requires alphabetic characters only.`;
-    }
-
-    if (newInput.validations?.numeric && !isNumeric(value)) {
-      error = `${newInput.label} requires numeric characters only.`;
-    }
-
-    if (
-      newInput.validations?.special === false &&
-      containsSpecialCharacters(value)
-    ) {
-      error = `${newInput.label} must not contain special characters.`;
-    }
-
-    if (newInput.validations?.isEmail && !isEmail(value)) {
-      error = `Please enter a valid email.`;
-    }
-
-    if (
-      newInput.validations?.isAlphabeticWithSpaces &&
-      !isAlphabeticWithSpaces(value)
-    ) {
-      error = `Please enter a valid Name.`;
-    }
+    Object.values(gym).some((val) => val === "");
 
     setFormErrors((prev) => ({
       ...prev,
@@ -115,10 +101,21 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
     }));
   };
 
-  // const validations =
-
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const errors = {};
+    inputs.forEach((input) => {
+      const value = formData.gym[input.name];
+      const error = validateFields(input, value);
+      if (error) errors[input.name] = error;
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
     onSubmit(formData);
   };
 
@@ -167,7 +164,7 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
         </div>
       ))}
       {dateTimeInput.map((field) => (
-        <div className="flex flex-col mb-4">
+        <div key={field.name} className="flex flex-col mb-4">
           <label
             htmlFor={field.name}
             className="text-sm font-medium text-gray-700"
@@ -185,9 +182,22 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
           ></input>
         </div>
       ))}
-      <button className="mt-6 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+      <button
+        className="mt-6 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled={
+          Object.values(formErrors).some((error) => error) ||
+          Object.values(requiredData).some((required) => required === false)
+        }
+      >
         {mode === "edit" ? "Update Gym" : "Create Gym"}
       </button>
+      <div>
+        {Object.values(formErrors).some((error) => error) && (
+          <p className="text-red-500 text-sm mt-1">
+            Please fix the errors above.
+          </p>
+        )}
+      </div>
     </form>
   );
 };
