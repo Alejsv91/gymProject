@@ -2,14 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.gym import Gym
-from app.schemas.gym import GymOut
+from app.schemas.gym import GymOut, GymCreate
 from typing import List
 
 router = APIRouter()
-
-# @router.get("/")
-# def get_gyms():
-#     return [{"name": "Gym A"}, {"name": "Gym B"}]
 
 # Session imports the object type to interact with the data base
 @router.get("/", response_model=List[GymOut])
@@ -26,8 +22,14 @@ def get_gym_by_id(gym_id: int, db: Session = Depends(get_db)):
 
 @router.get("/by-legal-id/{gym_legal_id}")
 def get_gym_by_legal_id(gym_legal_id: str, db: Session = Depends(get_db)):
-    print("Data in db: ", db.query(Gym))
-    print("this is from the url: ", gym_legal_id)
     gym = db.query(Gym).filter(Gym.legal_id == gym_legal_id).first()
     return { "exists": bool(gym) }
+
+@router.post("/", response_model=GymOut, status_code=201)
+def create_gym(gym_data: GymCreate, db: Session = Depends(get_db)):
+    gym = Gym(**gym_data.model_dump())
+    db.add(gym)
+    db.commit()
+    db.refresh(gym)
+    return gym
         
