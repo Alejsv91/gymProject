@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ENDPOINTS } from "../../constants/endpoints";
+import { deleteGym } from "../../services/gymservices";
 
 function Gyms() {
   const [gyms, setGyms] = useState([]);
@@ -8,7 +9,7 @@ function Gyms() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${ENDPOINTS.gyms}`) // ajusta el puerto si usas Docker
+    fetch(`${ENDPOINTS.gyms}`)
       .then((res) => res.json())
       .then((data) => {
         setGyms(data);
@@ -70,6 +71,7 @@ function Gyms() {
                 >
                   Edit
                 </button>
+                <button onClick={() => deleteGym(gym.id)}>Delete gym</button>
               </td>
             </tr>
           ))}
