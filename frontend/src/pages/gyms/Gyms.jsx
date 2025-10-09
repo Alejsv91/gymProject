@@ -79,7 +79,7 @@ function Gyms() {
       </table>
       <div>
         <button
-          onClick={() => navigate(ENDPOINTS.gymCreate)}
+          onClick={() => navigate("/gym/create")}
           className="mt-6 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
         >
           Register new gym
