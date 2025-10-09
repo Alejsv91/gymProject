@@ -6,7 +6,7 @@ class Gym(Base):
     __tablename__ = "gyms"
 
     id = Column(Integer, primary_key=True, index=True)
-    legal_id = Column(String, unique=True, nullable=False)         # cédula jurídica
+    legal_id = Column(String, unique=True, nullable=False)         
     name = Column(String, nullable=False)
     owner = Column(String, nullable=False)
     phone = Column(String, nullable=False)
