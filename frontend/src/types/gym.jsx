@@ -1,5 +1,5 @@
 export class Gym {
-  constructor(
+  constructor({
     id,
     legalId,
     name,
@@ -7,8 +7,8 @@ export class Gym {
     phone,
     email,
     isActive,
-    activationDate
-  ) {
+    activationDate,
+  }) {
     this.id = id;
     this.legalId = legalId;
     this.name = name;
@@ -17,5 +17,17 @@ export class Gym {
     this.email = email;
     this.isActive = isActive;
     this.activationDate = activationDate;
+  }
+
+  toCreatePayload() {
+    return {
+      legal_id: this.legalId,
+      name: this.name,
+      owner: this.owner,
+      phone: this.phone,
+      email: this.email,
+      is_active: this.isActive,
+      activation_date: this.activationDate,
+    };
   }
 }

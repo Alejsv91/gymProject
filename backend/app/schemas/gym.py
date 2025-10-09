@@ -9,7 +9,7 @@ class GymCreate(BaseModel):
     phone: Annotated[str, constr(min_length=8)]
     email: EmailStr
     is_active: bool = True
-    activation_date: Annotated[datetime, constr(strict=datetime)]
+    activation_date: datetime
     
 class GymOut(GymCreate): 
     id: int

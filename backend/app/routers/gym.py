@@ -4,6 +4,7 @@ from app.database import get_db
 from app.models.gym import Gym
 from app.schemas.gym import GymOut, GymCreate
 from typing import List
+from datetime import datetime
 
 router = APIRouter()
 
@@ -27,6 +28,7 @@ def get_gym_by_legal_id(gym_legal_id: str, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=GymOut, status_code=201)
 def create_gym(gym_data: GymCreate, db: Session = Depends(get_db)):
+    print('This is the gym data: ', gym_data)
     gym = Gym(**gym_data.model_dump())
     db.add(gym)
     db.commit()

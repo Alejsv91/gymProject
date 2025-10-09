@@ -1,11 +1,13 @@
 import axios from "axios";
 import { ENDPOINTS } from "../constants/endpoints";
+import { Gym } from "../types/gym";
 
-export async function createGym(data) {
-  console.log("Formulario enviado:", data);
-  const legalId = data.gym.legalId;
+export async function createGym(gymData) {
   try {
-    const response = await axios.get(ENDPOINTS.gymGetByLegalId(legalId));
+    const response = await axios.get(
+      ENDPOINTS.gymGetByLegalId(gymData.legalId)
+    );
+    let payload;
 
     //validate if legal entity is related to another gym
     if (response.data.exists) {
@@ -13,8 +15,12 @@ export async function createGym(data) {
       return;
     }
 
+    payload = gymData.toCreatePayload();
+
     //creating the new gym
-    await axios.post(ENDPOINTS.gyms, data.gym);
+    console.log("this is the data: ");
+    console.log(gymData);
+    await axios.post(ENDPOINTS.gyms, payload);
     alert("Gym created successfully");
     return;
   } catch (error) {

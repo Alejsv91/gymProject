@@ -61,19 +61,19 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
   ];
   const [formErrors, setFormErrors] = useState({});
   const initialRequiredData = inputs.reduce((acc, input) => {
-    if (input.required) acc[input.name] = false;
+    if (input?.required) acc[input.name] = false;
     return acc;
   }, {});
   const [requiredData, setRequiredData] = useState(initialRequiredData);
 
   const checkbox = [{ name: "isActive", label: "Is Active" }];
-  const dateTimeInput = [{ name: "activationDate", label: "Activation Date" }];
+  // const dateTimeInput = [{ name: "activationDate", label: "Activation Date" }];
 
   const handleChange = (e, newInput) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
-    if (newInput.required) {
+    if (newInput?.required) {
       setRequiredData((prev) => ({
         ...prev,
         [name]: newValue.trim() !== "",
@@ -116,7 +116,18 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
       return;
     }
 
-    onSubmit(formData);
+    const gymInstance = new Gym({
+      id: formData.gym.id || null,
+      legalId: formData.gym.legalId,
+      name: formData.gym.name,
+      owner: formData.gym.owner,
+      phone: formData.gym.phone,
+      email: formData.gym.email,
+      isActive: formData.gym.isActive,
+      activationDate: new Date().toISOString().split("T")[0],
+    });
+
+    onSubmit(gymInstance);
   };
 
   return (
@@ -163,7 +174,7 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
           </label>
         </div>
       ))}
-      {dateTimeInput.map((field) => (
+      {/* {dateTimeInput.map((field) => (
         <div key={field.name} className="flex flex-col mb-4">
           <label
             htmlFor={field.name}
@@ -181,7 +192,7 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
             required
           ></input>
         </div>
-      ))}
+      ))} */}
       <button
         className="mt-6 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={
