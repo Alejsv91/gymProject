@@ -1,19 +1,20 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, constr
 from datetime import datetime
+from typing import Annotated
 
-class Gym(BaseModel):
-    legal_id: str
-    name: str
-    owner: str
-    phone: str
-    email: str
-    is_active: bool
-    
-class GymOut(Gym): 
-    id: int
+class GymCreate(BaseModel):
+    legal_id: Annotated[str, constr(min_length=9, max_length=30)]
+    name: Annotated[str, constr(min_length=3)]
+    owner: Annotated[str, constr(min_length=3)]
+    phone: Annotated[str, constr(min_length=8)]
+    email: EmailStr
+    is_active: bool = True
     activation_date: datetime
     
-class GymUpdate(Gym):
+class GymOut(GymCreate): 
     id: int
-    activation_date: datetime
+    
+class GymUpdate(GymCreate):
+    id: int
+    
     

@@ -2,8 +2,13 @@ from fastapi import FastAPI
 from app.database import engine
 from app.models.gym import Base
 from app.routers import gym 
+from app.exceptions import handlers
+from fastapi.exceptions import RequestValidationError
+
+
 
 app = FastAPI()
+app.add_exception_handler(RequestValidationError, handlers.validation_exception_handler)
 
 # Crear tablas al iniciar la app
 @app.on_event("startup")
