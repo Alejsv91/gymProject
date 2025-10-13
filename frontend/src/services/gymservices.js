@@ -27,4 +27,7 @@ export async function createGym(gymData) {
 
 export async function deleteGym(gymId) {
   console.log("This should remove the gym ", gymId);
+  const answer = confirm("Are you sure to delete this gym?");
+  if (answer) {
+  }
 }
