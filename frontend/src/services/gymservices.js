@@ -16,7 +16,7 @@ export async function createGym(gymData) {
     payload = gymData.toCreatePayload();
     await axios.post(ENDPOINTS.gyms, payload);
     alert("Gym created successfully");
-    return;
+    return true;
   } catch (error) {
     console.error("Error when system try to create a gym: ", error);
     alert(
@@ -25,9 +25,19 @@ export async function createGym(gymData) {
   }
 }
 
-export async function deleteGym(gymId) {
-  console.log("This should remove the gym ", gymId);
-  const answer = confirm("Are you sure to delete this gym?");
-  if (answer) {
+export async function deleteGym(gym) {
+  console.log("This should remove the gym ", gym.id);
+  console.log(ENDPOINTS.gymDelete(gym.id));
+  try {
+    const answer = window.confirm(`Are you sure to delete the ${gym.name}`);
+    if (answer) {
+      await axios.delete(ENDPOINTS.gymDelete(gym.id));
+      return true;
+    }
+  } catch (error) {
+    console.log(`Error deleting the gym: ${gym.id}. Error: ${error}`);
+    alert(
+      "Error when system try to delete the gym, please contact the administrador"
+    );
   }
 }

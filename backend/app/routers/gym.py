@@ -34,4 +34,14 @@ def create_gym(gym_data: GymCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(gym)
     return gym
+
+@router.delete("/{gym_id}", status_code=204)
+def delete_gym(gym_id: int, db: Session = Depends(get_db)):
+    print('Removing Gym id: ', gym_id)
+    gym = db.query(Gym).filter(Gym.id == gym_id).first()
+    if not gym:
+        raise HTTPException(status_code=404, detail="Gym not found")
+    db.delete(gym)
+    db.commit()
+    return
         
