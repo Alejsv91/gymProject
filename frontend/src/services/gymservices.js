@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ENDPOINTS } from "../constants/endpoints";
+import { Gym } from "../types/gym";
 
 export async function createGym(gymData) {
   try {
@@ -40,4 +41,43 @@ export async function deleteGym(gym) {
       "Error when system try to delete the gym, please contact the administrador"
     );
   }
+}
+
+export async function getGymDetailsById(id) {
+  try {
+    let response = await axios.get(ENDPOINTS.gymDetail(id));
+    let gym = new Gym({
+      id: response.data.id,
+      legalId: response.data.legal_id,
+      name: response.data.name,
+      owner: response.data.owner,
+      phone: response.data.phone,
+      email: response.data.email,
+      isActive: response.data.isActive || true,
+      activationDate:
+        response.data.activationDate || new Date().toISOString().split("T")[0],
+    });
+    return gym;
+  } catch (error) {}
+
+  // axios
+  //   .get(ENDPOINTS.gymDetail(id))
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     let gym = new Gym({
+  //       id: response.data.id,
+  //       legalId: response.data.legal_id,
+  //       name: response.data.name,
+  //       owner: response.data.owner,
+  //       phone: response.data.phone,
+  //       email: response.data.email,
+  //       isActive: response.data.isActive || true,
+  //       activationDate:
+  //         data.activationDate || new Date().toISOString().split("T")[0],
+  //     });
+  //   return gym;
+  // })
+  // .catch((err) => {
+  //   console.log("Error fetching gym data: ", err);
+  // });
 }

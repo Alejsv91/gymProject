@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ENDPOINTS } from "../../constants/endpoints";
 import { deleteGym } from "../../services/gymservices";
+import { ROUTE_PATHS } from "../../constants/routes";
 
 function Gyms() {
   const [gyms, setGyms] = useState([]);
@@ -71,7 +72,7 @@ function Gyms() {
               <td className="px-6 py-4 text-sm text-gray-600">{gym.phone}</td>
               <td className="px-6 py-4 text-sm text-gray-600">
                 <button
-                  onClick={() => navigate(`${ENDPOINTS.gymEdit(gym.id)}`)}
+                  onClick={() => navigate(ROUTE_PATHS.gymEdit(gym.id))}
                   className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                 >
                   Edit

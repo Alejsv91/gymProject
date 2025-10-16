@@ -3,16 +3,18 @@ import { Gym } from "../../types/gym";
 import { validateFields } from "../../utils/validationUtils";
 
 const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
-  const gym = new Gym(
-    initialValues.id || "",
-    initialValues.legalId || "",
-    initialValues.name || "",
-    initialValues.owner || "",
-    initialValues.phone || "",
-    initialValues.email || "",
-    initialValues.isActive || true,
-    initialValues.activationDate || new Date().toISOString().split("T")[0]
-  );
+  console.log("Initial Values: ", initialValues);
+  const gym = new Gym({
+    id: initialValues.id || "",
+    legalId: initialValues.legalId || "",
+    name: initialValues.name || "",
+    owner: initialValues.owner || "",
+    phone: initialValues.phone || "",
+    email: initialValues.email || "",
+    isActive: initialValues.isActive || true,
+    activationDate:
+      initialValues.activationDate || new Date().toISOString().split("T")[0],
+  });
   const [formData, setFormData] = useState({
     gym,
   });
