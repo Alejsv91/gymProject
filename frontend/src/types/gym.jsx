@@ -20,6 +20,17 @@ export class Gym {
   }
 
   toCreatePayload() {
+    return this.toBasePayload();
+  }
+
+  toUpdatePayload() {
+    return {
+      ...this.toBasePayload(),
+      id: this.id,
+    };
+  }
+
+  toBasePayload() {
     return {
       legal_id: this.legalId,
       name: this.name,

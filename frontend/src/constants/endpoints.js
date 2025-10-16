@@ -7,6 +7,7 @@ export const ENDPOINTS = {
   gymDetail: (id) => `${API_BASE_URL}/${gyms}/by-id/${id}/`,
   gymEdit: (id) => `/${gyms}/${id}/edit`,
   gymDelete: (id) => `${API_BASE_URL}/${gyms}/${id}`,
+  gymUpdate: (id) => `${API_BASE_URL}/${gyms}/${id}`,
   gymGetByLegalId: (legal_id) =>
     `${API_BASE_URL}/${gyms}/by-legal-id/${legal_id}`,
 };

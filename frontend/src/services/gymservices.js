@@ -58,26 +58,19 @@ export async function getGymDetailsById(id) {
         response.data.activationDate || new Date().toISOString().split("T")[0],
     });
     return gym;
-  } catch (error) {}
+  } catch (err) {
+    console.log("Error fetching gym data: ", err);
+  }
+}
 
-  // axios
-  //   .get(ENDPOINTS.gymDetail(id))
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     let gym = new Gym({
-  //       id: response.data.id,
-  //       legalId: response.data.legal_id,
-  //       name: response.data.name,
-  //       owner: response.data.owner,
-  //       phone: response.data.phone,
-  //       email: response.data.email,
-  //       isActive: response.data.isActive || true,
-  //       activationDate:
-  //         data.activationDate || new Date().toISOString().split("T")[0],
-  //     });
-  //   return gym;
-  // })
-  // .catch((err) => {
-  //   console.log("Error fetching gym data: ", err);
-  // });
+export async function updateGymDetails(gymData) {
+  try {
+    console.log("This is the gym data:", gymData);
+    let payload = gymData.toUpdatePayload();
+    console.log("This is the current url", ENDPOINTS.gymUpdate(payload.id));
+    await axios.put(ENDPOINTS.gymUpdate(payload.id), payload);
+    return true;
+  } catch (err) {
+    console.log("Error when user try to update the gym. Error: ", err);
+  }
 }

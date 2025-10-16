@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.gym import Gym
-from app.schemas.gym import GymOut, GymCreate
+from app.schemas.gym import GymOut, GymCreate, GymUpdate
 from typing import List
 from datetime import datetime
 
@@ -44,4 +44,20 @@ def delete_gym(gym_id: int, db: Session = Depends(get_db)):
     db.delete(gym)
     db.commit()
     return
+
+@router.put("/{gym_id}", status_code=200)
+def update_gym(gym_id: int, gym_data: GymUpdate, db: Session = Depends(get_db)):
+    print('Updating gym id: ', gym_id)
+    gym = db.query(Gym).filter(Gym.id == gym_id).first()
+    
+    if not gym: 
+        raise HTTPException(status_code=404, detail="Gym not found")
+    
+    for field, value in gym_data.model_dump().items():
+        setattr(gym, field, value)
+        
+    db.commit()
+    db.refresh(gym)
+    return gym
+    
         
