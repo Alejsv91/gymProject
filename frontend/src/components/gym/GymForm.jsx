@@ -63,7 +63,9 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
   ];
   const [formErrors, setFormErrors] = useState({});
   const initialRequiredData = inputs.reduce((acc, input) => {
-    if (input?.required) acc[input.name] = false;
+    if (input?.required) {
+      acc[input.name] = gym[input.name] !== "";
+    }
     return acc;
   }, {});
   const [requiredData, setRequiredData] = useState(initialRequiredData);
