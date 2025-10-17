@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ENDPOINTS } from "../../constants/endpoints";
 import { deleteGym } from "../../services/gymservices";
+import { ROUTE_PATHS } from "../../constants/routes";
 
 function Gyms() {
   const [gyms, setGyms] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchGyms = () => {
+    setLoading(true);
     fetch(`${ENDPOINTS.gyms}`)
       .then((res) => res.json())
       .then((data) => {
@@ -19,6 +21,10 @@ function Gyms() {
         console.error("Error fetching gyms:", err);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchGyms();
   }, []);
 
   if (loading) return <p>Loading gyms...</p>;
@@ -66,12 +72,22 @@ function Gyms() {
               <td className="px-6 py-4 text-sm text-gray-600">{gym.phone}</td>
               <td className="px-6 py-4 text-sm text-gray-600">
                 <button
-                  onClick={() => navigate(`${ENDPOINTS.gymEdit(gym.id)}`)}
+                  onClick={() => navigate(ROUTE_PATHS.gymEdit(gym.id))}
                   className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                 >
                   Edit
                 </button>
-                <button onClick={() => deleteGym(gym.id)}>Delete gym</button>
+                <button
+                  onClick={() => {
+                    if (deleteGym(gym)) {
+                      alert(`Gym ${gym.name} Deleted`);
+                      fetchGyms();
+                    }
+                  }}
+                  className="ml-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

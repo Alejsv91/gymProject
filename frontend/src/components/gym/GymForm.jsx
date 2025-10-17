@@ -3,16 +3,18 @@ import { Gym } from "../../types/gym";
 import { validateFields } from "../../utils/validationUtils";
 
 const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
-  const gym = new Gym(
-    initialValues.id || "",
-    initialValues.legalId || "",
-    initialValues.name || "",
-    initialValues.owner || "",
-    initialValues.phone || "",
-    initialValues.email || "",
-    initialValues.isActive || true,
-    initialValues.activationDate || new Date().toISOString().split("T")[0]
-  );
+  console.log("Initial Values: ", initialValues);
+  const gym = new Gym({
+    id: initialValues.id || "",
+    legalId: initialValues.legalId || "",
+    name: initialValues.name || "",
+    owner: initialValues.owner || "",
+    phone: initialValues.phone || "",
+    email: initialValues.email || "",
+    isActive: initialValues.isActive || true,
+    activationDate:
+      initialValues.activationDate || new Date().toISOString().split("T")[0],
+  });
   const [formData, setFormData] = useState({
     gym,
   });
@@ -61,7 +63,9 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
   ];
   const [formErrors, setFormErrors] = useState({});
   const initialRequiredData = inputs.reduce((acc, input) => {
-    if (input?.required) acc[input.name] = false;
+    if (input?.required) {
+      acc[input.name] = gym[input.name] !== "";
+    }
     return acc;
   }, {});
   const [requiredData, setRequiredData] = useState(initialRequiredData);
@@ -174,25 +178,7 @@ const GymForm = ({ initialValues = {}, mode = "create", onSubmit }) => {
           </label>
         </div>
       ))}
-      {/* {dateTimeInput.map((field) => (
-        <div key={field.name} className="flex flex-col mb-4">
-          <label
-            htmlFor={field.name}
-            className="text-sm font-medium text-gray-700"
-          >
-            {field.label}
-          </label>
-          <input
-            type="date"
-            id={field.name}
-            name={field.name}
-            value={formData.gym[field.name]}
-            onChange={handleChange}
-            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          ></input>
-        </div>
-      ))} */}
+
       <button
         className="mt-6 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={
